@@ -21,9 +21,17 @@ for dir in BORG_DATA_DIR SSH_KEY_DIR ; do
 	fi
 done
 
-# Copy SSH-Host-Keys to persistent storage
+# (Create &) Copy SSH-Host-Keys to persistent storage
 mkdir -p ${SSH_KEY_DIR}/host 2>/dev/null
 echo " * Checking / Preparing SSH Host-Keys..."
+
+if [ ! -f /etc/ssh/ssh_host_rsa_key ] ; then
+	echo "  ** Creating SSH Hostkeys..."
+	for keytype in ed25519 rsa ; do
+		ssh-keygen -q -f "/etc/ssh/ssh_host_${keytype}_key" -N '' -t $keytype
+	done
+fi
+
 for keyfile in ssh_host_rsa_key ssh_host_ed25519_key ; do
 	if [ ! -f "${SSH_KEY_DIR}/host/${keyfile}" ] ; then
 		cp /etc/ssh/${keyfile} "${SSH_KEY_DIR}/host/${keyfile}"
