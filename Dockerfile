@@ -18,7 +18,7 @@ RUN mkdir /run/sshd
 COPY ./data/run.sh /run.sh
 COPY ./data/sshd_config /etc/ssh/sshd_config
 
-CMD /bin/bash -x /run.sh
+CMD /bin/bash /run.sh
 
 # Default SSH-Port for clients
 EXPOSE 22
