@@ -6,7 +6,7 @@ Here is a quick example how to configure & run this image:
 
 Create persistent directories
 ```
-mkdir -p borg/sshkeys/client borg/backup
+mkdir -p borg/sshkeys/clients borg/backup
 ```
 
 Copy any client ssh publickey into container
