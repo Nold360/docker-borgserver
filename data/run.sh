@@ -2,8 +2,13 @@
 # Init borg-users .ssh/authorized_keys
 
 BORG_DATA_DIR=/backup
-BORG_CMD='cd ${BORG_DATA_DIR}/${client_name}; borg serve --append-only --restrict-to-path ${BORG_DATA_DIR}/${client_name}'
+BORG_CMD='cd ${BORG_DATA_DIR}/${client_name}; borg serve --restrict-to-path ${BORG_DATA_DIR}/${client_name}'
 SSH_KEY_DIR=/sshkeys
+
+# Parse environment
+if [ ! -z "${BORG_SERVE_ARGS}" ] ; then
+	BORG_CMD="${BORG_CMD} ${BORG_SERVE_ARGS}"
+fi
 
 # add all sshkeys to borg-user's authorized_keys & create repositories
 echo "########################################################"
@@ -40,6 +45,7 @@ done
 echo "########################################################"
 
 echo " * Starting SSH-Key import..."
+rm /home/borg/.ssh/authorized_keys &>/dev/null
 for keyfile in $(find "${SSH_KEY_DIR}/clients" -type f); do
     client_name=$(basename $keyfile)
     echo "  ** Adding client ${client_name} with repo path ${BORG_DATA_DIR}/${client_name}"

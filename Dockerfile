@@ -22,7 +22,7 @@ RUN rm -f /etc/ssh/ssh_host*key* ; \
 COPY ./data/run.sh /run.sh
 COPY ./data/sshd_config /etc/ssh/sshd_config
 
-CMD /bin/bash /run.sh
+ENTRYPOINT /run.sh
 
 # Default SSH-Port for clients
 EXPOSE 22
