@@ -17,7 +17,7 @@ LogLevel INFO
 #LogLevel DEBUG
 
 Ciphers chacha20-poly1305@openssh.com,aes256-gcm@openssh.com,aes128-gcm@openssh.com,aes256-ctr,aes128-ctr
-MACs hmac-sha2-512-etm@openssh.com,hmac-sha2-256-etm@openssh.com,umac-128-etm@openssh.com,hmac-sha2-512,hmac-sha2-256,hmac-ripemd160
+MACs hmac-sha2-512-etm@openssh.com,hmac-sha2-256-etm@openssh.com,umac-128-etm@openssh.com,hmac-sha2-512,hmac-sha2-256
 KexAlgorithms curve25519-sha256@libssh.org,diffie-hellman-group-exchange-sha256,diffie-hellman-group14-sha1,diffie-hellman-group-exchange-sha1
 
 
@@ -29,6 +29,5 @@ AllowTcpForwarding no
 X11Forwarding no
 PermitTTY no
 PrintMotd no
-UsePrivilegeSeparation sandbox
 PermitTunnel no
 Subsystem	sftp	/bin/false
