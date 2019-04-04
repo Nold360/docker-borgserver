@@ -4,10 +4,10 @@ For every ssh-key added, a own borg-repository will be created.
 
 **NOTE: I will assume that you know, what a ssh-key is and how to generate & use it. If not, you might want to start here: [Arch Wiki](https://wiki.archlinux.org/index.php/SSH_Keys)**
 
-### Quick Example
+## Quick Example
 Here is a quick example how to configure & run this image:
 
-#### Create persistent sshkey storage
+### Create persistent sshkey storage
 ```
  $ mkdir -p borg/sshkeys/clients
 ```
@@ -17,7 +17,7 @@ Make sure that the permissions are right on the sshkey folder:
  $ chown 1000:1000 borg/sshkeys
 ```
 
-#### (Generate &) Copy every client's ssh publickey into persistent storage
+### (Generate &) Copy every client's ssh publickey into persistent storage
 *Remember*: Filename = Borg-repository name!
 ```
  $ cp ~/.ssh/my_machine.pub borg/sshkeys/clients/my_machine
@@ -26,27 +26,50 @@ Make sure that the permissions are right on the sshkey folder:
 The OpenSSH-Deamon will expose on port 22/tcp - so you will most likely want to redirect it to a different port. Like in this example:
 ```
 docker run -td \
-			-p 2222:22  \
-			--volume ./borg/sshkeys:/sshkeys \
-			--volume ./borg/backup:/backup \
-			nold360/borgserver:latest
+	-p 2222:22  \
+	--volume ./borg/sshkeys:/sshkeys \
+	--volume ./borg/backup:/backup \
+	nold360/borgserver:latest
 ```
 
 
 ## Borgserver Configuration
  * Place Borg-Clients SSH-PublicKeys in persistent storage
- * Client Repositories will be named by the filename found in /sshkeys/clients/
+ * Client backup-directories will be named by the filename found in /sshkeys/clients/
 
 ### Environment Variables
 #### BORG_SERVE_ARGS
 Use this variable if you want to set special options for the "borg serve"-command, which is used internally.
 
-See the the documentation for all available arguments: [borgbackup.readthedocs.io](https://borgbackup.readthedocs.io/en/1.0.9/usage.html#borg-serve)
+See the the documentation for all available arguments: [borgbackup.readthedocs.io](https://borgbackup.readthedocs.io/en/stable/usage.html#borg-serve)
 
 ##### Example
 ```
-docker run -e BORG_SERVE_ARGS="--append-only --debug" (...) nold360/borgserver
+docker run --rm -e BORG_SERVE_ARGS="--progress --debug" (...) nold360/borgserver
 ```
+
+#### BORG_APPEND_ONLY
+If you want your client to be only able to append & not prune anything from their repo, set this variable to **"yes"**.
+
+
+#### BORG_ADMIN
+When *BORG_APPEND_ONLY* is active, no client is able to prune it's repo. 
+Since you might want to cleanup the repos at some point, you can declare one client to be the borg "admin".
+
+This client will have **full access to all repos of any client!** So he's able to add/prune/... what ever he wants.
+
+To declare a client as admin, set this variable to the name of the client/sshkey you've added to the /sshkeys/clients directory.
+
+##### Example
+```
+docker run --rm -e BORG_APPEND_ONLY="yes" -e BORG_ADMIN="nolds_notebook" (...) nold360/borgserver
+```
+
+To prune repos from another client, you have to add the path to the repository in the clients directory:
+```
+borg prune --keep-last 100 --keep-weekly 1 (...) borgserver:/clientA/clientA
+```
+
 
 ### Persistent Storages & Client Configuration
 We will need two persistent storage directories for our borgserver to be usefull.
@@ -90,10 +113,12 @@ services:
   ports:
    - "2222:22"
   environment:
-   BORG_SERVE_ARGS: "--append-only"
+   BORG_SERVE_ARGS: ""
+   BORG_APPEND_ONLY: "no"
+   BORG_ADMIN: ""
 ```
 
-### ~/.ssh/config
+### ~/.ssh/config for clients
 With this configuration (on your borg client) you can easily connect to your borgserver.
 ```
 Host backup
