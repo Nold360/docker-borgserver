@@ -27,7 +27,7 @@ for dir in BORG_DATA_DIR SSH_KEY_DIR ; do
 		exit 1
 	fi
 
-	if [ "$(find ${SSH_KEY_DIR}/clients -type f | wc -l)" == "0" ] ; then
+	if [ "$(find ${SSH_KEY_DIR}/clients -type f -not -iname ".*" | wc -l)" == "0" ] ; then
 		echo "ERROR: No SSH-Pubkey file found in ${SSH_KEY_DIR}"
 		exit 1
 	fi
@@ -48,7 +48,7 @@ echo " * Starting SSH-Key import..."
 
 # Add every key to borg-users authorized_keys
 rm /home/borg/.ssh/authorized_keys &>/dev/null
-for keyfile in $(find "${SSH_KEY_DIR}/clients" -type f); do
+for keyfile in $(find "${SSH_KEY_DIR}/clients" -type f -not -iname ".*"); do
     client_name=$(basename ${keyfile})
     mkdir ${BORG_DATA_DIR}/${client_name} 2>/dev/null
     echo "  ** Adding client ${client_name} with repo path ${BORG_DATA_DIR}/${client_name}"

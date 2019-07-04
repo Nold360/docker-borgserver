@@ -78,7 +78,7 @@ We will need two persistent storage directories for our borgserver to be usefull
 This directory has two subdirectories:
 
 ##### /sshkeys/clients/
-Here we will put all SSH public keys from our borg clients, we want to backup. Every key must be it's own file, containing only one line, with the key. The name of the file will become the name of the borg repository, we need for our client to connect.
+Here we will put all SSH public keys from our borg clients, we want to backup. Every key must be it's own file, containing only one line, with the key. The name of the file will become the name of the borg repository, we need for our client to connect. Hidden files are ignored.
 
 That means every client get's it's own repository. So you might want to use the hostname of the client as the name of the sshkey file.
 
