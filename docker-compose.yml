@@ -1,0 +1,20 @@
+version: '3'
+services:
+ borgserver:
+  image: nold360/borgserver
+  #build: .
+  volumes:
+   - ./backup:/backup
+   - ./sshkeys:/sshkeys
+  ports:
+   - "2222:22"
+  environment:
+   BORG_SERVE_ARGS: ""
+
+   # If set to "yes", only the BORG_ADMIN
+   # can delete/prune the all clients archives/repos
+   BORG_APPEND_ONLY: "no"
+
+   # Hostname of Admin's SSH-Key
+   BORG_ADMIN: ""
+  restart: unless-stopped
