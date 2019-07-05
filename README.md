@@ -82,8 +82,10 @@ Here we will put all SSH public keys from our borg clients, we want to backup. E
 
 That means every client get's it's own repository. So you might want to use the hostname of the client as the name of the sshkey file.
 
+Hidden files & files inside of hidden directories will be ignored!
+
 ```
-F.e. /sshkeys/clients/webserver.mydomain.com
+e.g. /sshkeys/clients/webserver.mydomain.com
 ```
 
 Than your client would have to initiat the borg repository like this:
