@@ -1,8 +1,8 @@
 version: '3'
 services:
  borgserver:
-  image: nold360/borgserver
-  #build: .
+  #image: nold360/borgserver
+  build: .
   volumes:
    - ./backup:/backup
    - ./sshkeys:/sshkeys
@@ -17,4 +17,7 @@ services:
 
    # Hostname of Admin's SSH-Key
    BORG_ADMIN: ""
+
+   # Client Pubkeys in git:
+   SSH_KEY_GIT: "https://github.com/<username>/<repo>.git"
   restart: unless-stopped

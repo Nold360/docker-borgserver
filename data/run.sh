@@ -1,12 +1,12 @@
 #!/bin/bash
 # Start Script for docker-borgserver
+#set -x
 
-BORG_DATA_DIR=/backup
-SSH_KEY_DIR=/sshkeys
-BORG_CMD='cd ${BORG_DATA_DIR}/${client_name}; borg serve --restrict-to-path ${BORG_DATA_DIR}/${client_name} ${BORG_SERVE_ARGS}'
-
-# Append only mode?
+#BORG_SERVE_ARGS=${BORG_SERVE_ARGS:=""}
 BORG_APPEND_ONLY=${BORG_APPEND_ONLY:=no}
+BORG_DATA_DIR="${BORG_DATA_DIR:=/backup}"
+SSH_KEY_DIR="${SSH_KEY_DIR:=/sshkeys}"
+BORG_CMD='cd ${BORG_DATA_DIR}/${client_name}; borg serve --restrict-to-path ${BORG_DATA_DIR}/${client_name} ${BORG_SERVE_ARGS}'
 
 echo "########################################################"
 echo -n " * Docker BorgServer powered by "
@@ -16,6 +16,16 @@ echo "########################################################"
 # Precheck if BORG_ADMIN is set
 if [ "${BORG_APPEND_ONLY}" == "yes" ] && [ -z "${BORG_ADMIN}" ] ; then
 	echo "WARNING: BORG_APPEND_ONLY is active, but no BORG_ADMIN was specified!"
+fi
+
+if [ ! -z "${SSH_KEY_GIT}" ] ; then
+	echo "SSH_KEY_GIT set, cloning '${SSH_KEY_GIT}' into '${SSH_KEY_DIR}/clients'"
+	if [ ! -d "${SSH_KEY_DIR}/clients/.git" ] ; then
+		# FIXME: Should the container die here, in case of error?
+		git clone "${SSH_KEY_GIT}" "${SSH_KEY_DIR}/clients"
+	else
+		git -C "${SSH_KEY_DIR}/clients" pull
+	fi
 fi
 
 # Precheck directories & client ssh-keys
