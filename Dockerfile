@@ -14,10 +14,10 @@ ENV DEBIAN_FRONTEND noninteractive
 
 RUN apt-get update && apt-get -y --no-install-recommends install \
 		borgbackup openssh-server && apt-get clean && \
-		useradd -s /bin/bash -m borg && \
+		useradd -s /bin/bash -m -U borg && \
 		mkdir /home/borg/.ssh && \
 		chmod 700 /home/borg/.ssh && \
-		chown borg: /home/borg/.ssh && \
+		chown borg:borg /home/borg/.ssh && \
 		mkdir /run/sshd && \
 		rm -f /etc/ssh/ssh_host*key* && \
 		rm -rf /var/lib/apt/lists/* /var/tmp/* /tmp/*

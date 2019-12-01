@@ -1,9 +1,20 @@
 #!/bin/bash
 # Start Script for docker-borgserver
 
+PUID=${PUID:-1000}
+PGID=${PGID:-1000}
+
+usermod -o -u "$PUID" borg &>/dev/null
+groupmod -o -g "$PGID" borg &>/dev/null
+
+echo "########################################################"
+echo " * User id:  $(id -u borg)"
+echo " * Group id: $(id -g borg)"
+
 BORG_DATA_DIR=/backup
 SSH_KEY_DIR=/sshkeys
 BORG_CMD='cd ${BORG_DATA_DIR}/${client_name}; borg serve --restrict-to-path ${BORG_DATA_DIR}/${client_name} ${BORG_SERVE_ARGS}'
+AUTHORIZED_KEYS_PATH=/home/borg/.ssh/authorized_keys
 
 # Append only mode?
 BORG_APPEND_ONLY=${BORG_APPEND_ONLY:=no}
@@ -47,7 +58,7 @@ echo "########################################################"
 echo " * Starting SSH-Key import..."
 
 # Add every key to borg-users authorized_keys
-rm /home/borg/.ssh/authorized_keys &>/dev/null
+rm ${AUTHORIZED_KEYS_PATH} &>/dev/null
 for keyfile in $(find "${SSH_KEY_DIR}/clients" ! -regex '.*/\..*' -a -type f); do
     client_name=$(basename ${keyfile})
     mkdir ${BORG_DATA_DIR}/${client_name} 2>/dev/null
@@ -63,13 +74,13 @@ for keyfile in $(find "${SSH_KEY_DIR}/clients" ! -regex '.*/\..*' -a -type f); d
 		borg_cmd="${BORG_CMD} --append-only"
 	fi
 
-    echo -n "command=\"$(eval echo -n \"${borg_cmd}\")\" " >> /home/borg/.ssh/authorized_keys
-	cat ${keyfile} >> /home/borg/.ssh/authorized_keys
+    echo -n "command=\"$(eval echo -n \"${borg_cmd}\")\" " >> ${AUTHORIZED_KEYS_PATH}
+	cat ${keyfile} >> ${AUTHORIZED_KEYS_PATH}
 done
 
-chown -R borg: /backup
-chown borg: /home/borg/.ssh/authorized_keys
-chmod 600 /home/borg/.ssh/authorized_keys
+chown -R borg:borg ${BORG_DATA_DIR}
+chown borg:borg ${AUTHORIZED_KEYS_PATH}
+chmod 600 ${AUTHORIZED_KEYS_PATH}
 
 echo "########################################################"
 echo " * Init done! Starting SSH-Daemon..."

@@ -71,6 +71,14 @@ borg prune --keep-last 100 --keep-weekly 1 (...) borgserver:/clientA/clientA
 ```
 
 
+#### PUID
+Used to set the user id of the `borg` user inside the container. This can be useful when the container has to access resources on the host with a specific user id.
+
+
+#### PGID
+Used to set the group id of the `borg` group inside the container. This can be useful when the container has to access resources on the host with a specific group id.
+
+
 ### Persistent Storages & Client Configuration
 We will need two persistent storage directories for our borgserver to be usefull.
 
@@ -118,6 +126,8 @@ services:
    BORG_SERVE_ARGS: ""
    BORG_APPEND_ONLY: "no"
    BORG_ADMIN: ""
+   PUID: 1000
+   PGID: 1000
 ```
 
 ### ~/.ssh/config for clients
