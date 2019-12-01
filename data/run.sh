@@ -78,6 +78,13 @@ for keyfile in $(find "${SSH_KEY_DIR}/clients" ! -regex '.*/\..*' -a -type f); d
 	cat ${keyfile} >> ${AUTHORIZED_KEYS_PATH}
 done
 
+echo " * Validating structure of generated ${AUTHORIZED_KEYS_PATH}..."
+ERROR=$(ssh-keygen -lf ${AUTHORIZED_KEYS_PATH} 2>&1 >/dev/null)
+if [ $? -ne 0 ]; then
+    echo "ERROR: ${ERROR}"
+    exit 1
+fi
+
 chown -R borg:borg ${BORG_DATA_DIR}
 chown borg:borg ${AUTHORIZED_KEYS_PATH}
 chmod 600 ${AUTHORIZED_KEYS_PATH}
