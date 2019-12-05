@@ -7,10 +7,6 @@ PGID=${PGID:-1000}
 usermod -o -u "$PUID" borg &>/dev/null
 groupmod -o -g "$PGID" borg &>/dev/null
 
-echo "########################################################"
-echo " * User id:  $(id -u borg)"
-echo " * Group id: $(id -g borg)"
-
 BORG_DATA_DIR=/backup
 SSH_KEY_DIR=/sshkeys
 BORG_CMD='cd ${BORG_DATA_DIR}/${client_name}; borg serve --restrict-to-path ${BORG_DATA_DIR}/${client_name} ${BORG_SERVE_ARGS}'
@@ -23,6 +19,10 @@ echo "########################################################"
 echo -n " * Docker BorgServer powered by "
 borg -V
 echo "########################################################"
+echo " * User  id: $(id -u borg)"
+echo " * Group id: $(id -g borg)"
+echo "########################################################"
+
 
 # Precheck if BORG_ADMIN is set
 if [ "${BORG_APPEND_ONLY}" == "yes" ] && [ -z "${BORG_ADMIN}" ] ; then
