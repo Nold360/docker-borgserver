@@ -13,7 +13,7 @@ VOLUME /backup
 ENV DEBIAN_FRONTEND noninteractive
 
 RUN apt-get update && apt-get -y --no-install-recommends install \
-		borgbackup openssh-server && apt-get clean && \
+		borgbackup openssh-server git ca-certificates && apt-get clean && \
 		useradd -s /bin/bash -m -U borg && \
 		mkdir /home/borg/.ssh && \
 		chmod 700 /home/borg/.ssh && \
@@ -24,6 +24,9 @@ RUN apt-get update && apt-get -y --no-install-recommends install \
 
 COPY ./data/run.sh /run.sh
 COPY ./data/sshd_config /etc/ssh/sshd_config
+COPY ./data/update-ssh-keys.sh /usr/local/bin/
+COPY ./data/create-client-dirs.sh /usr/local/bin/
+COPY ./data/env.sh /usr/local/bin/env.sh
 
 ENTRYPOINT /run.sh
 
