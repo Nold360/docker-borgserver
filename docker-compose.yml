@@ -1,20 +1,46 @@
 version: '3'
 services:
- borgserver:
-  image: nold360/borgserver
-  #build: .
-  volumes:
-   - ./backup:/backup
-   - ./sshkeys:/sshkeys
-  ports:
-   - "2222:22"
-  environment:
-   BORG_SERVE_ARGS: ""
+  init:
+    image: borg:init
+    env_file: .env
+    volumes:
+      - borg-home:/home/borg/.ssh:rw
+      - host-keys:/sshkeys:rw
 
-   # If set to "yes", only the BORG_ADMIN
-   # can delete/prune the all clients archives/repos
-   BORG_APPEND_ONLY: "no"
+      # FIXME: i want to get rid of that..
+      - backup:/backup:rw
+    restart: "no"
 
-   # Hostname of Admin's SSH-Key
-   BORG_ADMIN: ""
-  restart: unless-stopped
+  borgserver:
+    #image: nold360/borgserver
+    image: borg:git
+    user: 1000:1000
+    volumes:
+      # generated authorized_keys by init
+      - borg-home:/home/borg/.ssh:ro
+
+      # only contains host-keys now
+      - host-keys:/sshkeys:ro
+
+      # Backup repository for borg
+      - backup:/backup:rw
+    ports:
+      - "2222:2222"
+    environment:
+      BORG_SERVE_ARGS: ""
+
+      # If set to "yes", only the BORG_ADMIN
+      # can delete/prune the all clients archives/repos
+      BORG_APPEND_ONLY: "no"
+
+      # Hostname of Admin's SSH-Key
+      BORG_ADMIN: ""
+    depends_on:
+      - init
+    restart: unless-stopped
+
+# Shared volume to exchange authorized_keys between init & server
+volumes:
+  borg-home:
+  host-keys:
+  backup:

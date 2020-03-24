@@ -1,17 +1,19 @@
-Port 22
+Port 2222
 AddressFamily any
 ListenAddress 0.0.0.0
 ListenAddress ::
 
-HostKey /sshkeys/host/ssh_host_rsa_key
-HostKey /sshkeys/host/ssh_host_ed25519_key
+HostKey /sshkeys/ssh_host_rsa_key
+HostKey /sshkeys/ssh_host_ed25519_key
+
+PidFile /tmp/sshd.pid
 
 PermitRootLogin no
 StrictModes yes
 MaxSessions 20
 
 PubkeyAuthentication yes
-AuthorizedKeysFile	.ssh/authorized_keys
+AuthorizedKeysFile	/home/borg/.ssh/authorized_keys
 
 LogLevel INFO
 
