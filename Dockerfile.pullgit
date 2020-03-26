@@ -1,0 +1,9 @@
+############################################################
+# Dockerfile to build borgbackup server images with git-pull support!
+# Based on Debian
+############################################################
+FROM borgserver:latest
+
+RUN apt-get update && apt-get -y --no-install-recommends install \
+		git ca-certificates && apt-get clean && \
+		rm -rf /var/lib/apt/lists/* /var/tmp/* /tmp/*

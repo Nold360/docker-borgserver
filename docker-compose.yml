@@ -1,13 +1,16 @@
 version: '3'
 services:
  borgserver:
-  image: nold360/borgserver
-  #build: .
+  #image: nold360/borgserver
+  build:
+    context: .
+    dockerfile: Dockerfile.pullgit
   volumes:
    - ./backup:/backup
    - ./sshkeys:/sshkeys
   ports:
    - "2222:22"
+  env_file: .env
   environment:
    BORG_SERVE_ARGS: ""
 

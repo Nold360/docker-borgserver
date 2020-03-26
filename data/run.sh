@@ -1,16 +1,10 @@
 #!/bin/bash
 # Start Script for docker-borgserver
-
 set -e
-
-PUID=${PUID:-1000}
-PGID=${PGID:-1000}
+source env.sh
 
 usermod -o -u "$PUID" borg &>/dev/null
 groupmod -o -g "$PGID" borg &>/dev/null
-
-#source variables
-source env.sh
 
 echo "########################################################"
 echo -n " * Docker BorgServer powered by "
@@ -18,11 +12,10 @@ borg -V
 echo "########################################################"
 echo " * User  id: $(id -u borg)"
 echo " * Group id: $(id -g borg)"
-if [ -z "${BORG_SSHKEYS_REPO}" ] ; then
-  echo "* Pulling keys from ${BORG_SSHKEYS_REPO}"
+if [ -z "${KEY_GIT_URL}" ] ; then
+  echo "* Pulling keys from ${KEY_GIT_URL}"
 fi
 echo "########################################################"
-
 
 # Precheck if BORG_ADMIN is set
 if [ "${BORG_APPEND_ONLY}" == "yes" ] && [ -z "${BORG_ADMIN}" ] ; then
@@ -30,13 +23,7 @@ if [ "${BORG_APPEND_ONLY}" == "yes" ] && [ -z "${BORG_ADMIN}" ] ; then
 fi
 
 # Init the ssh keys directory from a remote git repository
-if [ ! -z "${BORG_SSHKEYS_REPO}" ] ; then
-  if [ ! -d ${SSH_KEY_DIR}/clients ] ; then
-    git clone "${BORG_SSHKEYS_REPO}" ${SSH_KEY_DIR}/clients
-  else
-     /usr/local/bin/update-ssh-keys.sh ${SSH_KEY_DIR}
-  fi
-fi
+update-ssh-keys.sh
 
 # Precheck directories & client ssh-keys
 for dir in BORG_DATA_DIR SSH_KEY_DIR ; do
@@ -63,16 +50,8 @@ for keytype in ed25519 rsa ; do
 	fi
 done
 
-echo "########################################################"
-echo " * Starting SSH-Key import..."
-
 # Add every key to borg-users authorized_keys
-create-client-dirs.sh \
-  "${SSH_KEY_DIR}" \
-  "${BORG_DATA_DIR}" \
-  "${AUTHORIZED_KEYS_PATH}" \
-  "${BORG_CMD}" \
-  "${BORG_APPEND_ONLY}"
+create-client-dirs.sh
 
 echo "########################################################"
 echo " * Init done! Starting SSH-Daemon..."
