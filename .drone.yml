@@ -1,0 +1,18 @@
+---
+kind: pipeline
+name: build
+type: kubernetes
+
+steps:
+- name: build-image
+  image: plugins/buildah-docker
+  settings:
+    username:
+      from_secret: docker_username
+    password:
+      from_secret: docker_password
+    repo: nold360/borgserver
+    dockerfile: Dockerfile
+    tags:
+      - latest
+      - buster
