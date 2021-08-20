@@ -14,5 +14,5 @@ steps:
     repo: nold360/borgserver
     dockerfile: Dockerfile
     tags:
-      - latest
-      - buster
+      - bullseye
+      - 1.1.16
