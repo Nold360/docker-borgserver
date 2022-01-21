@@ -9,12 +9,13 @@ services:
   ports:
    - "2222:22"
   environment:
+  # Additional Arguments, see https://borgbackup.readthedocs.io/en/stable/usage/serve.html
    BORG_SERVE_ARGS: ""
 
    # If set to "yes", only the BORG_ADMIN
-   # can delete/prune the all clients archives/repos
+   # can delete/prune the other clients archives/repos
    BORG_APPEND_ONLY: "no"
 
-   # Hostname of Admin's SSH-Key
+   # Filename of Admins SSH-Key; has full access to all repos
    BORG_ADMIN: ""
   restart: unless-stopped

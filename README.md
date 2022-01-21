@@ -112,23 +112,7 @@ In this directory will borg write all the client data to. It's best to start wit
 
 ## Example Setup
 ### docker-compose.yml
-Here is a quick example, how to run borgserver using docker-compose:
-```
-services:
- borgserver:
-  image: nold360/borgserver
-  volumes:
-   - /backup:/backup
-   - ./sshkeys:/sshkeys
-  ports:
-   - "2222:22"
-  environment:
-   BORG_SERVE_ARGS: ""
-   BORG_APPEND_ONLY: "no"
-   BORG_ADMIN: ""
-   PUID: 1000
-   PGID: 1000
-```
+Here is a quick example, how to run borgserver using docker-compose: [docker-compose.yml](https://github.com/Nold360/docker-borgserver/blob/master/docker-compose.yml)
 
 ### ~/.ssh/config for clients
 With this configuration (on your borg client) you can easily connect to your borgserver.
