@@ -15,9 +15,11 @@ AUTHORIZED_KEYS_PATH=/home/borg/.ssh/authorized_keys
 # Append only mode?
 BORG_APPEND_ONLY=${BORG_APPEND_ONLY:=no}
 
+source /etc/os-release
 echo "########################################################"
 echo -n " * Docker BorgServer powered by "
 borg -V
+echo " * Based on ${PRETTY_NAME}"
 echo "########################################################"
 echo " * User  id: $(id -u borg)"
 echo " * Group id: $(id -g borg)"
@@ -74,7 +76,7 @@ for keyfile in $(find "${SSH_KEY_DIR}/clients" ! -regex '.*/\..*' -a -type f); d
 		borg_cmd="${BORG_CMD} --append-only"
 	fi
 
-    echo -n "command=\"$(eval echo -n \"${borg_cmd}\")\" " >> ${AUTHORIZED_KEYS_PATH}
+    echo -n "restrict,command=\"$(eval echo -n \"${borg_cmd}\")\" " >> ${AUTHORIZED_KEYS_PATH}
 	cat ${keyfile} >> ${AUTHORIZED_KEYS_PATH}
 done
 chmod 0600 "${AUTHORIZED_KEYS_PATH}"
