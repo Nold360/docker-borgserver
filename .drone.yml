@@ -4,7 +4,7 @@ name: build
 type: kubernetes
 
 steps:
-- name: build-image
+- name: build-bullseye
   image: plugins/kaniko
   settings:
     username:
@@ -13,6 +13,24 @@ steps:
       from_secret: docker_password
     repo: nold360/borgserver
     dockerfile: Dockerfile
+    build_args:
+      - BASE_IMAGE=debian:bullseye-slim
     tags:
+      - latest
       - bullseye
       - 1.1.16
+
+- name: build-buster
+  image: plugins/kaniko
+  settings:
+    username:
+      from_secret: docker_username
+    password:
+      from_secret: docker_password
+    repo: nold360/borgserver
+    dockerfile: Dockerfile
+    build_args:
+      - BASE_IMAGE=debian:buster-slim
+    tags:
+      - buster
+      - 1.1.9
