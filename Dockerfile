@@ -2,7 +2,8 @@
 # Dockerfile to build borgbackup server images
 # Based on Debian
 ############################################################
-FROM debian:bullseye-slim
+ARG BASE_IMAGE=debian:bullseye-slim
+FROM $BASE_IMAGE
 
 # Volume for SSH-Keys
 VOLUME /sshkeys
