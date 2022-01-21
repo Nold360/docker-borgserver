@@ -132,3 +132,9 @@ And create your first backup!
 ```
  $ borg create backup:my_first_borg_repo::documents-2017-11-01 /home/user/MyImportentDocs
 ```
+
+## Tags
+
+All images are freshly built every week & published as `nold360/borgserver` with the following tags:
+ - Latest / Stable [borg 1.1.16]: `bullseye`, `1.1.16`, `latest`
+ - Legacy / Buster [borg 1.1.9 ]: `buster`, `1.1.9`
