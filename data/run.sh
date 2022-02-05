@@ -76,8 +76,9 @@ for keyfile in $(find "${SSH_KEY_DIR}/clients" ! -regex '.*/\..*' -a -type f); d
 		borg_cmd="${BORG_CMD} --append-only"
 	fi
 
-    echo -n "restrict,command=\"$(eval echo -n \"${borg_cmd}\")\" " >> ${AUTHORIZED_KEYS_PATH}
-	cat ${keyfile} >> ${AUTHORIZED_KEYS_PATH}
+  echo -n "restrict,command=\"$(eval echo -n \"${borg_cmd}\")\" " >> ${AUTHORIZED_KEYS_PATH}
+  cat ${keyfile} >> ${AUTHORIZED_KEYS_PATH}
+  echo >> ${AUTHORIZED_KEYS_PATH}
 done
 chmod 0600 "${AUTHORIZED_KEYS_PATH}"
 
