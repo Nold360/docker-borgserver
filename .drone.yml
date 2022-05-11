@@ -4,6 +4,21 @@ name: build
 type: kubernetes
 
 steps:
+- name: build-bookworm
+  image: plugins/kaniko
+  settings:
+    username:
+      from_secret: docker_username
+    password:
+      from_secret: docker_password
+    repo: nold360/borgserver
+    dockerfile: Dockerfile
+    build_args:
+      - BASE_IMAGE=debian:bookworm-slim
+    tags:
+      - bookworm
+      - 1.2.0
+
 - name: build-bullseye
   image: plugins/kaniko
   settings:

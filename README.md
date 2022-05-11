@@ -136,5 +136,6 @@ And create your first backup!
 ## Tags
 
 All images are freshly built every week & published as `nold360/borgserver` with the following tags:
+ - Next / Unstable [borg 1.2.0]: `bookworm`, `1.2.0`
  - Latest / Stable [borg 1.1.16]: `bullseye`, `1.1.16`, `latest`
  - Legacy / Buster [borg 1.1.9 ]: `buster`, `1.1.9`
