@@ -17,7 +17,8 @@ steps:
       - BASE_IMAGE=debian:bookworm-slim
     tags:
       - bookworm
-      - 1.2.1
+      - 1.2
+      - 1.2.2
 
 - name: build-bullseye
   image: plugins/kaniko
