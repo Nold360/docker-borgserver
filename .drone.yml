@@ -6,6 +6,9 @@ type: kubernetes
 steps:
 - name: build-bookworm
   image: plugins/kaniko
+  environment:
+    # Workaround for Kanikos container detection
+    container: docker
   settings:
     username:
       from_secret: docker_username
@@ -21,6 +24,9 @@ steps:
 
 - name: build-bullseye
   image: plugins/kaniko
+  environment:
+    # Workaround for Kanikos container detection
+    container: docker
   settings:
     username:
       from_secret: docker_username
@@ -37,6 +43,9 @@ steps:
 
 - name: build-buster
   image: plugins/kaniko
+  environment:
+    # Workaround for Kanikos container detection
+    container: docker
   settings:
     username:
       from_secret: docker_username
