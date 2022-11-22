@@ -1,0 +1,30 @@
+---
+variables:
+  - &kaniko_plugin 'plugins/kaniko:1.6'
+
+matrix:
+  include:
+    - BASE: bookworm-slim
+      TAGS: '[ "bookwork", "1.2", "1.2.2" ]'
+    - BASE: bullseye-slim
+      TAGS: '[ "bullseye", "latest", "1.1.16" ]'
+    - BASE: buster-slim
+      TAGS: '[ "buster", "1.1.9" ]'
+
+pipeline:
+  build:
+    image: *kaniko_plugin
+    group: build
+    settings:
+      repo: nold360/borgserver
+      dockerfile: Dockerfile
+      build_args:
+        - BASE_IMAGE=debian:${BASE}
+      tags: ${TAGS}
+      username:
+        from_secret: docker_username
+      password:
+        from_secret: docker_password
+    when:
+      - branch: master
+      - event: cron
