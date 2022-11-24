@@ -5,14 +5,14 @@ variables:
 matrix:
   include:
     - BASE: bookworm-slim
-      TAGS: '[ "bookwork", "1.2", "1.2.2" ]'
+      TAGS: '[ "bookwork", "1.2", "1.2" ]'
     - BASE: bullseye-slim
       TAGS: '[ "bullseye", "latest", "1.1.16" ]'
     - BASE: buster-slim
       TAGS: '[ "buster", "1.1.9" ]'
 
-pipeline:
-  build:
+steps:
+  - name: build
     image: *kaniko_plugin
     group: build
     settings:
