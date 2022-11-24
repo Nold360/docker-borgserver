@@ -25,3 +25,6 @@ PermitTTY no
 PrintMotd no
 PermitTunnel no
 Subsystem	sftp	/bin/false
+
+ClientAliveInterval 10
+ClientAliveCountMax 30
