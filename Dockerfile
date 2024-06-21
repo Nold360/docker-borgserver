@@ -26,7 +26,7 @@ RUN apt-get update && apt-get -y --no-install-recommends install \
 COPY ./data/run.sh /run.sh
 COPY ./data/sshd_config /etc/ssh/sshd_config
 
-ENTRYPOINT /run.sh
-
 # Default SSH-Port for clients
 EXPOSE 22
+
+ENTRYPOINT ["/run.sh"]
