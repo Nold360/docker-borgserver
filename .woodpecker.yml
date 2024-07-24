@@ -4,8 +4,10 @@ variables:
 
 matrix:
   include:
+    - BASE: trixie-slim
+      TAGS: '[ "trixie", "1.4" ]'
     - BASE: bookworm-slim
-      TAGS: '[ "bookwork", "1.2", "1.2" ]'
+      TAGS: '[ "bookwork", "1.2" ]'
     - BASE: bullseye-slim
       TAGS: '[ "bullseye", "latest", "1.1.16" ]'
     - BASE: buster-slim
