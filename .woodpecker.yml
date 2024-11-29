@@ -7,11 +7,7 @@ matrix:
     - BASE: trixie-slim
       TAGS: '[ "trixie", "1.4" ]'
     - BASE: bookworm-slim
-      TAGS: '[ "bookworm", "1.2" ]'
-    - BASE: bullseye-slim
-      TAGS: '[ "bullseye", "latest", "1.1.16" ]'
-    - BASE: buster-slim
-      TAGS: '[ "buster", "1.1.9" ]'
+      TAGS: '[ "bookworm", "1.2", "latest" ]'
 
 steps:
   - name: build
