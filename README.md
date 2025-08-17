@@ -137,7 +137,7 @@ And create your first backup!
 
 All images are freshly built and published to both Docker Hub and GitHub Container Registry with the following tags:
   - Stable - [borg version](https://packages.debian.org/trixie/borgbackup): `trixie`, `latest`
-  - Old Stable - [borg version](https://packages.debian.org/stable/borgbackup): `bookworm`
+  - Old Stable - [borg version](https://packages.debian.org/bookworm/borgbackup): `bookworm`
   - Unstable - [borg version](https://packages.debian.org/sid/borgbackup): `unstable`
 
 ### Docker Hub
