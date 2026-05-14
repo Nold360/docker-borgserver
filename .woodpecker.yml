@@ -3,13 +3,7 @@ matrix:
   include:
     - BASE: unstable-slim
       TAGS: '[ "unstable" ]'
-      PLATFORMS: linux/386,linux/amd64
-    - BASE: trixie-slim
-      TAGS: '[ "trixie", "1.4", "latest" ]'
-      PLATFORMS: linux/386,linux/amd64,linux/arm/v7,linux/arm64/v8
-    - BASE: bookworm-slim
-      TAGS: '[ "bookworm", "1.2", "oldstable" ]'
-      PLATFORMS: linux/386,linux/amd64,linux/arm/v7,linux/arm64/v8
+      PLATFORMS: linux/arm64/v8
 
 variables:
   - &build-settings
